@@ -2,27 +2,27 @@ package com.hibernateLibraryProject.dto;
 
 import com.hibernateLibraryProject.model.Book;
 import com.hibernateLibraryProject.model.Member;
-import com.hibernateLibraryProject.model.Transaction;
+import com.hibernateLibraryProject.model.BorrowRecord;
 
-public class TransactionDTO {
+public class BorrowRecordDTO {
 
-    private Transaction transaction;
+    private BorrowRecord borrowRecord;
     private Book book;
     private Member member;
 
-    public TransactionDTO(Transaction transaction, Book book, Member member) {
-        this.transaction = transaction;
+    public BorrowRecordDTO(BorrowRecord borrowRecord, Book book, Member member) {
+        this.borrowRecord = borrowRecord;
         this.book = book;
         this.member = member;
     }
 
     // Getters and setters
-    public Transaction getTransaction() {
-        return transaction;
+    public BorrowRecord getTransaction() {
+        return borrowRecord;
     }
 
-    public void setTransaction(Transaction transaction) {
-        this.transaction = transaction;
+    public void setTransaction(BorrowRecord transaction) {
+        this.borrowRecord = transaction;
     }
 
     public Book getBook() {

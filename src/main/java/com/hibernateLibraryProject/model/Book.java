@@ -3,15 +3,15 @@ package com.hibernateLibraryProject.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "books")
+@Table(name = "Books")
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private String title;
-    private String author;
-    private String genre;
+    private String writer;
+    private String department;
     private boolean available = true;
 
     public int getId() {
@@ -30,20 +30,20 @@ public class Book {
         this.title = title;
     }
 
-    public String getAuthor() {
-        return author;
+    public String getWriter() {
+        return writer;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public void setWriter(String writer) {
+        this.writer = writer;
     }
 
-    public String getGenre() {
-        return genre;
+    public String getDepartment() {
+        return department;
     }
 
-    public void setGenre(String genre) {
-        this.genre = genre;
+    public void setDepartment(String department) {
+        this.department = department;
     }
 
     public boolean isAvailable() {
@@ -59,8 +59,8 @@ public class Book {
         return "Book{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
-                ", author='" + author + '\'' +
-                ", genre='" + genre + '\'' +
+                ", writer='" + writer + '\'' +
+                ", department='" + department + '\'' +
                 ", available=" + available +
                 '}';
     }

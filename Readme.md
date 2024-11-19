@@ -1,18 +1,22 @@
 # Hibernate Library Project 📚
 
-A **Library Management System** built using **Java**, **Hibernate**, and **MySQL**, designed to efficiently manage library operations such as adding books, registering members, issuing books, and returning books.
+A **Library Management System** built using **Java**, **Hibernate**, and **MySQL**, designed to efficiently manage library operations such as adding books, adding members, issuing books, returning books and more.
+
 
 ---
 
 ## Features 🚀
 
 1. **Add New Books**: Maintain a catalog of books in the library.
-2. **Register New Members**: Track library members and their details.
+2. **Add New Members**: Track library members and their details.
 3. **Issue Books**: Allow members to borrow books from the library.
 4. **Return Books**: Manage the return process and update the availability of books.
-5. **View All Books**: Display all books in the library with their details.
-6. **View All Members**: Display all registered members and their information.
-7. **View All Transactions**: Show the history of all book issues and returns.
+5. **Check Fines**: Calculate and display fines for overdue books by borrow record ID.
+6. **Add Feedback**: Members can provide feedback for books.
+7. **View All Books**: Display all books in the library with their details.
+8. **View All Members**: Display all registered members and their information.
+9. **View All Borrow Records**: Show the history of all book issues and returns.
+10. **Exit Application**: Terminate the program gracefully.
 
 ---
 
@@ -25,9 +29,9 @@ A **Library Management System** built using **Java**, **Hibernate**, and **MySQL
 
 ### Architecture
 - **Model-View-Controller (MVC)**: 
-  - **Model**: Represents the entities like `Book`, `Member`, and `Transaction`.
+  - **Model**: Represents the entities like `Book`, `Member`, and `BorrowRecord`.
   - **DAO Layer**: Handles database operations using Hibernate.
-  - **Service Layer**: Implements business logic for issuing/returning books and managing entities.
+  - **Service Layer**: Implements business logic for managing library operations.
   - **UI**: Console-based, menu-driven interface for user interaction.
 
 ---
@@ -36,8 +40,8 @@ A **Library Management System** built using **Java**, **Hibernate**, and **MySQL
 src/main/java/com/hibernateLibraryProject/ <br>
                              ├── config/ # Hibernate utility configuration <br>
                              ├── dao/ # Data Access Objects (DAO) for database operations<br> 
-                             ├── dto/ # Data Transfer Objects (if applicable) <br>
-                             ├── model/ # Entity classes (Book, Member, Transaction) <br>
+                             ├── dto/ # Data Transfer Objects <br>
+                             ├── model/ # Entity classes (Book, Member, BorrowRecord, Feedback) <br>
                              ├── service/ # Business logic and service classes <br>
                              └── App.java # Main class for running the application<br>
 
@@ -74,18 +78,20 @@ Compile and run the App.java file using your favorite IDE or terminal:
 ```
 javac App.java
 java App
-Interact with the menu:
 ```
 5.  **Interact with the menu:**
 
 ```
-Library Management System Menu:
+Welcome Library Administrator, Please select an option from the menu below:
 1. Add a new book
-2. Register a new member
+2. Add a new member
 3. Issue a book
 4. Return a book
-5. Show all books
-6. Show all members
-7. Show all transactions
-8. Exit
+5. Check for a fine by borrowRecord ID
+6. Add feedback for a book
+7. Show all books
+8. Show all members
+9. Show all borrow records
+10. Exit
+Enter your choice:
 ```
