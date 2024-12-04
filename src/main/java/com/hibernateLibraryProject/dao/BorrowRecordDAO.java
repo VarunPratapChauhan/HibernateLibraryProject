@@ -22,17 +22,6 @@ public class BorrowRecordDAO {
         return borrowRecord;
     }
 
-    // Fetch a BorrowRecord by bookId and memberId
-//    public List<BorrowRecord> getBorrowRecordsByBookIdAndMemberId(int bookId, int memberId) {
-//        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-//            String hql = "FROM BorrowRecord WHERE book.id = :bookId AND member.id = :memberId";
-//            Query<BorrowRecord> query = session.createQuery(hql, BorrowRecord.class);
-//            query.setParameter("bookId", bookId);
-//            query.setParameter("memberId", memberId);
-//            return query.list();
-//        }
-//    }
-
     public List<BorrowRecord> getBorrowRecordByBookIdAndMemberId(int bookId, int memberId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             String hql = "FROM BorrowRecord br WHERE br.book.id = :bookId AND br.member.id = :memberId";

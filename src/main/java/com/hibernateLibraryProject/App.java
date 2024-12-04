@@ -7,7 +7,6 @@ import com.hibernateLibraryProject.service.BookService;
 import com.hibernateLibraryProject.service.MemberService;
 import com.hibernateLibraryProject.service.BorrowRecordService;
 import com.hibernateLibraryProject.service.FeedbackService;
-
 import com.hibernateLibraryProject.config.HibernateUtil;
 
 import java.text.ParseException;
@@ -41,15 +40,28 @@ public class App {
                 System.out.println("10. Exit");
                 System.out.print("Enter your choice: ");
 
-                int choice = scanner.nextInt();
-                scanner.nextLine(); // Consume the newline
+                int choice;
+                try {
+                    choice = Integer.parseInt(scanner.nextLine());
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid input. Please enter a valid number.");
+                    continue;
+                }
 
                 switch (choice) {
                     case 1:
                         System.out.print("Enter book name: ");
                         String title = scanner.nextLine();
+                        if (!validateName(title)) {
+                            System.out.println("Invalid book name. Names cannot contain numbers.");
+                            break;
+                        }
                         System.out.print("Enter writer name: ");
                         String writer = scanner.nextLine();
+                        if (!validateName(writer)) {
+                            System.out.println("Invalid writer name. Names cannot contain numbers.");
+                            break;
+                        }
                         System.out.print("Enter department: ");
                         String department = scanner.nextLine();
 
@@ -65,8 +77,16 @@ public class App {
                     case 2:
                         System.out.print("Enter member name: ");
                         String name = scanner.nextLine();
+                        if (!validateName(name)) {
+                            System.out.println("Invalid member name. Names cannot contain numbers.");
+                            break;
+                        }
                         System.out.print("Enter member email: ");
                         String email = scanner.nextLine();
+                        if (!validateEmail(email)) {
+                            System.out.println("Invalid email address. Please provide a valid email (Ex - user@example.com).");
+                            break;
+                        }
 
                         Member member = new Member();
                         member.setName(name);
@@ -78,10 +98,10 @@ public class App {
 
                     case 3:
                         System.out.print("Enter book ID to issue: ");
-                        int bookId = scanner.nextInt();
+                        int bookId = getIntegerInput(scanner, "Invalid book ID. Please enter a valid number.");
                         System.out.print("Enter member ID to issue the book to: ");
-                        int memberId = scanner.nextInt();
-                        scanner.nextLine(); // Consume newline
+                        int memberId = getIntegerInput(scanner, "Invalid member ID. Please enter a valid number.");
+                        //scanner.nextLine(); // Consume newline
 
                         while (true) {
                             System.out.print("Enter due date (yyyy-MM-dd): ");
@@ -94,7 +114,7 @@ public class App {
                                 if (dueDate.before(currentDate)) {
                                     System.out.println("The due date cannot be a past date. Please enter a valid due date.");
                                 } else {
-                                    borrowRecordService.issueBook(bookId, memberId, dueDate);
+                                    if(borrowRecordService.issueBook(bookId, memberId, dueDate))
                                     System.out.println("Book issued successfully with due date: " + dueDate);
                                     break; // Exit the loop when a valid date is entered
                                 }
@@ -106,11 +126,9 @@ public class App {
 
                     case 4:
                         System.out.print("Enter book ID to return: ");
-                        int returnBookId = scanner.nextInt();
+                        int returnBookId = getIntegerInput(scanner, "Invalid book ID. Please enter a valid number.");
                         System.out.print("Enter member ID who is returning the book: ");
-                        int returnMemberId = scanner.nextInt();
-
-//                        BorrowRecord borrowRecord = borrowRecordService.getBorrowRecordByBookIdAndMemberId(returnBookId, returnMemberId);
+                        int returnMemberId = getIntegerInput(scanner, "Invalid member ID. Please enter a valid number.");
 
                         List<BorrowRecord> borrowRecords = borrowRecordService.getBorrowRecordByBookIdAndMemberId(returnBookId, returnMemberId);
                         BorrowRecord borrowRecord = (borrowRecords != null && !borrowRecords.isEmpty()) ? borrowRecords.get(0) : null;
@@ -123,22 +141,12 @@ public class App {
                             System.out.println("Checked for overdue fines.");
 
                             System.out.print("Would you like to add feedback for the book? (yes/no): ");
-                            scanner.nextLine(); // Consume newline
                             String feedbackChoice = scanner.nextLine().toLowerCase();
 
                             if (feedbackChoice.equals("yes")) {
                                 System.out.print("Enter feedback (text): ");
                                 String feedbackText = scanner.nextLine();
-                                int rating = 0;
-                                while (rating < 1 || rating > 5) {
-                                    System.out.print("Enter rating (1 to 5): ");
-                                    try {
-                                        rating = Integer.parseInt(scanner.nextLine());
-                                    } catch (NumberFormatException e) {
-                                        System.out.println("Invalid input. Please enter a number between 1 and 5.");
-                                    }
-                                }
-
+                                int rating = getRating(scanner);
                                 feedbackService.addFeedback(returnBookId, returnMemberId, feedbackText, rating);
                                 System.out.println("Feedback added successfully.");
                             }
@@ -149,24 +157,21 @@ public class App {
 
                     case 5:
                         System.out.print("Enter borrowRecord ID to check fine: ");
-                        int fineBorrowRecordId = scanner.nextInt();
+                        int fineBorrowRecordId = getIntegerInput(scanner, "Invalid borrowRecord ID. Please enter a valid number.");
                         borrowRecordService.checkAndIssueFine(fineBorrowRecordId);
-                        System.out.println("Fine checked and issued successfully.");
+                        System.out.println("Fine checked and shown successfully.");
                         break;
 
                     case 6:
                         System.out.print("Enter book ID to add feedback for: ");
-                        int feedbackBookId = scanner.nextInt();
+                        int feedbackBookId = getIntegerInput(scanner, "Invalid book ID. Please enter a valid number.");
                         System.out.print("Enter member ID to provide feedback: ");
-                        int feedbackMemberId = scanner.nextInt();
-                        scanner.nextLine(); // Consume newline
+                        int feedbackMemberId = getIntegerInput(scanner, "Invalid member ID. Please enter a valid number.");
 
                         System.out.print("Enter your feedback: ");
-                        String feedbackText = scanner.nextLine();
-                        System.out.print("Enter rating (1 to 5): ");
-                        int feedbackRating = scanner.nextInt();
-
-                        feedbackService.addFeedback(feedbackBookId, feedbackMemberId, feedbackText, feedbackRating);
+                        String feedback = scanner.nextLine();
+                        int feedbackRating = getRating(scanner);
+                        feedbackService.addFeedback(feedbackBookId, feedbackMemberId, feedback, feedbackRating);
                         System.out.println("Feedback added successfully.");
                         break;
 
@@ -194,10 +199,48 @@ public class App {
                         System.out.println("Invalid choice. Please try again.");
                 }
             }
+        } catch (Exception e) {
+            System.err.println("An error occurred: " + e.getMessage());
+            e.printStackTrace();
         } finally {
             HibernateUtil.shutdown();
             scanner.close();
             System.out.println("Application terminated.");
         }
+    }
+
+    // Validate name to ensure no numbers are present
+    private static boolean validateName(String name) {
+        return name != null && name.matches("[a-zA-Z ]+");
+    }
+
+    // Validate email address using a regular expression
+    private static boolean validateEmail(String email) {
+        return email != null && email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
+    }
+
+    // Get integer input with error handling
+    private static int getIntegerInput(Scanner scanner, String errorMessage) {
+        while (true) {
+            try {
+                return Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println(errorMessage);
+            }
+        }
+    }
+
+    // Get rating input with validation
+    private static int getRating(Scanner scanner) {
+        int rating = 0;
+        while (rating < 1 || rating > 5) {
+            System.out.print("Enter rating (1 to 5): ");
+            try {
+                rating = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a number between 1 and 5.");
+            }
+        }
+        return rating;
     }
 }

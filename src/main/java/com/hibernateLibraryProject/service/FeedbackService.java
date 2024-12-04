@@ -14,12 +14,6 @@ public class FeedbackService {
     private FeedbackDAO feedbackDAO = new FeedbackDAO();
     private BookDAO bookDAO = new BookDAO();
     private MemberDAO memberDAO = new MemberDAO();
-
- // Logic for adding feedback
-//    public void addFeedback(Feedback feedback) {
-//        // Save feedback to database or handle it accordingly
-//        System.out.println("Feedback saved: " + feedback.getFeedbackText() + " with rating: " + feedback.getRating());
-//    }
     
     public void addFeedback(int returnBookId, int returnMemberId, String feedbackText, int rating) {
         // Validate rating range
@@ -44,10 +38,6 @@ public class FeedbackService {
         Feedback feedback = new Feedback(book, member, feedbackText, rating);
         feedbackDAO.addFeedback(feedback);
     }
-
-//    public void addFeedback(Feedback feedback) {
-//        feedbackDAO.saveFeedback(feedback);
-//    }
 
     public List<Feedback> getFeedbackForBook(int bookId) {
         return feedbackDAO.getFeedbackForBook(bookId);

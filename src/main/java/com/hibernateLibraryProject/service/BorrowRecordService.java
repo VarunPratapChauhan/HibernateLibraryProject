@@ -52,7 +52,7 @@ public class BorrowRecordService {
 	}
 
 	// Issue a book to a member
-	public void issueBook(int bookId, int memberId, Date dueDate) {
+	public boolean issueBook(int bookId, int memberId, Date dueDate) {
 		Book book = bookDAO.getBookById(bookId);
 		Member member = memberDAO.getMemberById(memberId);
 
@@ -70,8 +70,10 @@ public class BorrowRecordService {
 			// Mark the book as not available
 			book.setAvailable(false);
 			bookDAO.updateBook(book);
+			return true;
 		} else {
 			System.out.println("Either the book or the member doesn't exist or the book is already issued.");
+			return false;
 		}
 	}
 
@@ -101,7 +103,7 @@ public class BorrowRecordService {
 					// Mark the book as available again if at least one transaction was returned
 					book.setAvailable(true);
 					bookDAO.updateBook(book);
-					System.out.println("Book returned successfully.");
+//					System.out.println("Book returned successfully.");
 				} else {
 					System.out.println("No outstanding transaction found for this book and member.");
 				}
